@@ -6,6 +6,8 @@ import * as SocketIo from 'socket.io';
 import { GGBConnectDatabase } from './database';
 import { GGBConnectApp } from './app';
 
+process.env.POSTGRES_URI = 'postgres://ggb:ggb@localhost/ggb';
+
 /* Check for required environment variables */
 if (!process.env.POSTGRES_URI) {
   console.error('Expected POSTGRES_URI in environment.');
