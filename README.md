@@ -1,3 +1,5 @@
+[![CodeFactor](https://www.codefactor.io/repository/github/maine-imre/ggb-connect-server/badge)](https://www.codefactor.io/repository/github/maine-imre/ggb-connect-server)
+
 ## ggb-connect-server API Specification
 
 ```
