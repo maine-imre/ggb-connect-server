@@ -43,7 +43,7 @@ export class GGBConnectApp {
     page.exposeFunction('updateListener', async (objName: string) => {
       const obj = await page.evaluate(
         (objName) => {
-          return window.ggbApplet.getValueString(objName);
+          return window.ggbApplet.getCommandString(objName);
         },
         objName,
       );
