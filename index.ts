@@ -176,22 +176,16 @@ if (!process.env.POSTGRES_URI) {
 
     /* Handle socket.io connections */
     io.on('connection', (socket) => {
-      socket.on('subscribe', (sessionId: any, cb: (res: any) => {}) => {
+      socket.on('subscribe', (sessionId: any) => {
         if (typeof sessionId !== 'string') {
-          return cb({
-            success: false,
-            error: 'Invalid session id',
-          });
+          return;
         }
 
         /* Get session */
         const sess = app.getSession(sessionId);
 
         if (sess === undefined) {
-          return cb({
-            success: false,
-            error: 'Session with specified id not found.',
-          });
+          return;
         }
 
         /* Join room for session */

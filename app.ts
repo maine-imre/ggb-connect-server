@@ -34,29 +34,34 @@ export class GGBConnectApp {
     /* Set perspective and add event listeners */
     const page = await plotter.pagePromise;
 
-    page.exposeFunction('addListener', (...args: any[]) => {
-      this.io.to(sessionId).emit('add', ...args);
+    await page.exposeFunction('addListener', async (objName: string) => {
+      const obj = await page.evaluate(
+          (objName) => {
+            return window.ggbApplet.getCommandString(objName);
+          },
+          objName,
+      );
+      this.io.to(sessionId).emit('add', objName.concat(` = ${obj}`));
     });
-    page.exposeFunction('removeListener', (...args: any[]) => {
+    await page.exposeFunction('removeListener', (...args: any[]) => {
       this.io.to(sessionId).emit('remove', ...args);
     });
-    page.exposeFunction('updateListener', async (objName: string) => {
+    await page.exposeFunction('updateListener', async (objName: string) => {
       const obj = await page.evaluate(
         (objName) => {
           return window.ggbApplet.getCommandString(objName);
         },
         objName,
       );
-
-      this.io.to(sessionId).emit('update', obj);
+      this.io.to(sessionId).emit('update', objName.concat(` = ${obj}`));
     });
-    page.exposeFunction('renameListener', (...args: any[]) => {
+    await page.exposeFunction('renameListener', (...args: any[]) => {
       this.io.to(sessionId).emit('rename', ...args);
     });
 
     const window: any = {};
 
-    page.evaluate(() => {
+    await page.evaluate(() => {
       window.ggbApplet.setPerspective('T');
       window.ggbApplet.registerAddListener('addListener');
       window.ggbApplet.registerRemoveListener('removeListener');
