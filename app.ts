@@ -35,25 +35,23 @@ export class GGBConnectApp {
     const page = await plotter.pagePromise;
 
     await page.exposeFunction('addListener', async (objName: string) => {
-      const obj = await page.evaluate(
-          (objName) => {
-            return window.ggbApplet.getCommandString(objName);
-          },
-          objName,
-      );
-      this.io.to(sessionId).emit('add', objName.concat(` = ${obj}`));
+      this.io.to(sessionId).emit('add', JSON.stringify({
+        name      : objName,
+        command   : window.ggbApplet.getCommandString(objName),
+        value     : window.ggbApplet.getValueString(objName),
+        type      : window.ggbApplet.getObjectType(objName),
+      }));
     });
     await page.exposeFunction('removeListener', (...args: any[]) => {
       this.io.to(sessionId).emit('remove', ...args);
     });
     await page.exposeFunction('updateListener', async (objName: string) => {
-      const obj = await page.evaluate(
-        (objName) => {
-          return window.ggbApplet.getCommandString(objName);
-        },
-        objName,
-      );
-      this.io.to(sessionId).emit('update', objName.concat(` = ${obj}`));
+      this.io.to(sessionId).emit('update', JSON.stringify({
+        name      : objName,
+        command   : window.ggbApplet.getCommandString(objName),
+        value     : window.ggbApplet.getValueString(objName),
+        type      : window.ggbApplet.getObjectType(objName),
+      }));
     });
     await page.exposeFunction('renameListener', (...args: any[]) => {
       this.io.to(sessionId).emit('rename', ...args);
