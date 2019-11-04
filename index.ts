@@ -193,7 +193,7 @@ if (!process.env.POSTGRES_URI) {
 
     /* Start server */
     await serv.start();
-    console.log('Hapi %s server started at: %s', serv.version, serv.info.uri);
+    console.log('Hapi %s server started at: %s test', serv.version, serv.info.uri);
   })(
     process.env.POSTGRES_URI,
     process.env.LISTEN_ADDRESS,

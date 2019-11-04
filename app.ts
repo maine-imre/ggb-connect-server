@@ -35,29 +35,37 @@ export class GGBConnectApp {
     const page = await plotter.pagePromise;
 
     await page.exposeFunction('addListener', async (objName: string) => {
-
-      const objJSON = await page.evaluate(JSON.stringify({
-        name      : objName,
-        command   : window.ggbApplet.getCommandString(objName),
-        value     : window.ggbApplet.getValueString(objName),
-        type      : window.ggbApplet.getObjectType(objName),
-      }));
-
+      const objJSON = await page.evaluate(
+          (objName) => {
+            return JSON.stringify({
+              name      : objName,
+              command   : window.ggbApplet.getCommandString(objName),
+              value     : window.ggbApplet.getValueString(objName),
+              type      : window.ggbApplet.getObjectType(objName),
+            });
+          },
+          objName,
+      );
       this.io.to(sessionId).emit('add', objJSON);
     });
     await page.exposeFunction('removeListener', (...args: any[]) => {
       this.io.to(sessionId).emit('remove', ...args);
     });
     await page.exposeFunction('updateListener', async (objName: string) => {
-      const objJSON = await page.evaluate(JSON.stringify({
-        name      : objName,
-        command   : window.ggbApplet.getCommandString(objName),
-        value     : window.ggbApplet.getValueString(objName),
-        type      : window.ggbApplet.getObjectType(objName),
-      }));
-
+      const objJSON = await page.evaluate(
+          (objName) => {
+            return JSON.stringify({
+              name      : objName,
+              command   : window.ggbApplet.getCommandString(objName),
+              value     : window.ggbApplet.getValueString(objName),
+              type      : window.ggbApplet.getObjectType(objName),
+            });
+          },
+          objName,
+      );
       this.io.to(sessionId).emit('update', objJSON);
     });
+
     await page.exposeFunction('renameListener', (...args: any[]) => {
       this.io.to(sessionId).emit('rename', ...args);
     });
